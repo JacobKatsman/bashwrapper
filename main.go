@@ -34,14 +34,18 @@ import (
   func timeChecker(n FileScheme) {
     defer duration(track("foo"))
 
+
+	m := fileStat.CSize(n.Source)
 	
-    source := fmt.Sprintf("Source Overall size = %.2fMB\n",fileStat.CSize(n.Source))
+    source := fmt.Sprintf("Source Overall file size = %.2fMB | Total FILES = %d (all) \n", m[0], int(m[1]))
 	io.WriteString(os.Stdout, fmt.Sprintf("-------------------------------------------\n"))
 	io.WriteString(os.Stdout, fileExtTableStat.CSize(n.Source))
 
 	s := fileChangeCopyFiles.CFiles(n)
 
-    destination :=  fmt.Sprintf("Destination Overall size = %.2fMB\n",fileStat.CSize(n.Destination))
+
+	v := fileStat.CSize(n.Destination)
+    destination :=  fmt.Sprintf("Destination Overall size = %.2fMB | Total FILES = %d (all) \n",v[0], int(v[1]))
 	
 	io.WriteString(os.Stdout, fmt.Sprintf("--------------------------------------------\n"))
 	io.WriteString(os.Stdout, fileExtTableStat.CSize(n.Destination))
@@ -81,6 +85,9 @@ func main() {
 	var source string
 	var destination string
 
+	//./main -source /home/useralex/bashwrapper/bashwrapper/folder/source -destination /home//useralex/bashwrapper/bashwrapper/folder/destination
+	//
+ 	
 	flag.StringVar(&source, "source", "input_dir", "Directory")
 	flag.StringVar(&destination, "destination", "output_dir", "Directory")
 	flag.Parse()

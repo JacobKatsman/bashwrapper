@@ -9,6 +9,7 @@ import (
     . "main/lib/header"
 	"sync"
 	"fmt"
+	fileStat "main/lib/utils/fileStat"
 	copy "main/lib/utils/module/fileOperationModule"
 	jpgOperationModule  "main/lib/utils/module/jpgOperationModule"
 	pdfOperationModule  "main/lib/utils/module/pdfOperationModule"
@@ -118,16 +119,31 @@ func blockProcessing(start int, n FileScheme) {
 	}	
 }
 
+func  getFileTotalCount(n FileScheme) int {
+    m := fileStat.CSize(n.Source)
+	return int(m[1])
+}
+
 //  Set Constant Name and global variables value
 var wg sync.WaitGroup
 var m FileSizeTable
-var count_max_record = 9
+
+//  how much files into the folder?
+//  посчитать файлы во всех рекурсивных директориях
+var count_max_record int
 var block_size = 4
 var start_value = 0
 
 func CFiles(n FileScheme) string {
 	//var m FileSizeTable
 	//m.CopyFiles(n)
+	count_max_record = getFileTotalCount(n)
+	if (count_max_record < block_size) {block_size = count_max_record} 
+
+	//------
+    fmt.Printf( "Total  files = %d \n", count_max_record)
+	//------
+	
 	blockProcessing(start_value, n)
 	wg.Wait()
 	return "Processing does compleat! \n"
