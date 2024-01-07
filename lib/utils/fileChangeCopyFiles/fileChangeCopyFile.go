@@ -35,11 +35,7 @@ func MatchFilesTypeDir (id int, n FileScheme, file os.FileInfo) bool{
 	var s FileScheme
 	var m FileSizeTable
 
-    
-	
-	//------ log
     fmt.Printf("Folder processing  %d (id mod 5 = %d) START\n", id , id%(block_size + 1))
-	//------ log
 	
     err := os.Mkdir(n.Destination + "/" + file.Name(), (os.ModePerm));
 		   if  err != nil { log.Fatal(err)}
@@ -50,9 +46,7 @@ func MatchFilesTypeDir (id int, n FileScheme, file os.FileInfo) bool{
 	
 	m.CopyFiles(id, s)
 
-	//------ log
     fmt.Printf("Folder Processing %d DONE\n", (id))
-	//------ log
 	
 	return true
 }
@@ -60,8 +54,7 @@ func MatchFilesTypeDir (id int, n FileScheme, file os.FileInfo) bool{
 func MatchFilesTypeFile (id  int, n FileScheme, file os.FileInfo) bool{
 	extFile := filepath.Ext(file.Name())
 	if (slices.Index(Jpeg_ext, extFile)) != -1  {
-	      wg.Add(1)
-		        // jpg utils
+	    wg.Add(1)
 		go func() {
 		 		defer wg.Done()
 		        copy.CopyFile (n.Source + "/" + file.Name(),n.Destination + "/" + file.Name())
@@ -74,7 +67,7 @@ func MatchFilesTypeFile (id  int, n FileScheme, file os.FileInfo) bool{
 
 	        } else if slices.Index(Pdf_ext, extFile) != -1  {
 		wg.Add(1)
-		      go func() {
+		go func() {
 					defer wg.Done()
 	            fmt.Printf("File PDF processing  %d (id mod 5 = %d) %s START\n", id, id%(block_size + 1), file.Name())
 				pdfOperationModule.SimplePdf(n,file.Name())
