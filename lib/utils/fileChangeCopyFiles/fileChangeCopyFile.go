@@ -38,9 +38,6 @@ func MatchFilesTypeDir (id int, n FileScheme, file os.FileInfo) int{
 	if (id%(block_size) == block_size) {
 		wg.Wait()
     }
-	
-    //fmt.Printf("Folder processing  %d (id mod 5 = %d) START\n", id , id%(block_size + 1))
-	
     err := os.Mkdir(n.Destination + "/" + file.Name(), (os.ModePerm));
 		   if  err != nil { log.Fatal(err)}
 	       s = FileScheme{
@@ -49,8 +46,6 @@ func MatchFilesTypeDir (id int, n FileScheme, file os.FileInfo) int{
 		   }
 
 	i := m.CopyFiles(id, s)
-    //fmt.Printf("Folder Processing %d DONE\n", i)
-	
 	return i
 }
 
@@ -65,21 +60,17 @@ func MatchFilesTypeFile (id  int, n FileScheme, file os.FileInfo) int{
 		go func() {
 		 		defer wg.Done()
 		        copy.CopyFile (n.Source + "/" + file.Name(),n.Destination + "/" + file.Name())
-			//fmt.Printf("File JPG processing %d (id mod 5 = %d) %s START\n", id , id%(block_size + 1), file.Name())
 				jpgOperationModule.SimpleJpg(n,file.Name())
 				strmTime := timeOperationModule.GetCustomTime(filepath.Join(n.Source,file.Name()));
 				timeOperationModule.ChangeCustomTime(filepath.Join(n.Destination,file.Name()), strmTime)
-			//fmt.Printf("File JPG Processing %d DONE\n", (id))        
 		}()
 	        } else if slices.Index(Pdf_ext, extFile) != -1  {
 		wg.Add(1)
 		go func() {
 				defer wg.Done()
-			//fmt.Printf("File PDF processing  %d (id mod 5 = %d) %s START\n", id, id%(block_size + 1), file.Name())
 				pdfOperationModule.SimplePdf(n,file.Name())
 				strmTime := timeOperationModule.GetCustomTime(filepath.Join(n.Source,file.Name()));
 			    timeOperationModule.ChangeCustomTime(filepath.Join(n.Destination,file.Name()), strmTime)
-			//fmt.Printf("File PDF Processing DONE\n")
 		}()
 		
 	} else {
@@ -91,9 +82,6 @@ func MatchFilesTypeFile (id  int, n FileScheme, file os.FileInfo) int{
 
 func (m FileSizeTable) CopyFiles(id int ,n FileScheme) int{
 	i := id + 1
-	//if (id%(block_size + 1) == block_size) {
-	//	wg.Wait()
-    //}
 	files, _ := ioutil.ReadDir(n.Source)
 	for _, file := range files {
 		if file.IsDir() {
