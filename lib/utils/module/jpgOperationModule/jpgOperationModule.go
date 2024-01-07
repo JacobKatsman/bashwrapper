@@ -9,6 +9,7 @@ import (
 )
 
 func regexpDest (fileName string) string {
+	// TODO поправить 
 	 var re = regexp.MustCompile(`\(`)
 	 fileName = re.ReplaceAllString(fileName, `\(`)
      var re1 = regexp.MustCompile(`\)`)

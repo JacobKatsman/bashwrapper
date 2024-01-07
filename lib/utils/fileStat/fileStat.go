@@ -28,13 +28,12 @@ func (m FileSize) CalcSize(fullfilePath string, Size float64, CountFiles int ) [
 	var  t FS = FileSize{}
 	i := CountFiles
     files, _ := ioutil.ReadDir(fullfilePath)
-	        for _, file := range files { 
+	for _, file := range files {
+		        i = i + 1
 				if file.IsDir() {
-					i = i + 1
 					ArrSize :=  t.CalcSize((fullfilePath + "/" + file.Name()), Size, i)
 					Size += ArrSize[0]
 				} else {
-					i = i + 1
                     Size += GetFileSize((fullfilePath + "/" + file.Name()))
  			    }
 			}
