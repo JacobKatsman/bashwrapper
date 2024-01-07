@@ -30,10 +30,11 @@ func (m FileSize) CalcSize(fullfilePath string, Size float64, CountFiles int ) [
     files, _ := ioutil.ReadDir(fullfilePath)
 	for _, file := range files {
 		        i = i + 1
-				if file.IsDir() {
+		if file.IsDir() {
 					ArrSize :=  t.CalcSize((fullfilePath + "/" + file.Name()), Size, i)
-					Size += ArrSize[0]
-				} else {
+			        Size += ArrSize[0]
+			        i = int(ArrSize[1])
+		} else {
                     Size += GetFileSize((fullfilePath + "/" + file.Name()))
  			    }
 			}
@@ -47,6 +48,7 @@ func CSize(fullfilePath string) [2]float64 {
 	var t FS = FileSize{}
 	mschemeUtils = ExtendedFileScheme {
 		    Source: fullfilePath,
-		}
-	return t.CalcSize(mschemeUtils.Source, 0, 0)
+			}
+	b := t.CalcSize(mschemeUtils.Source, 0, 0)
+	return b
 }
