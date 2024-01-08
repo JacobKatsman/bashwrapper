@@ -85,9 +85,6 @@ func main() {
 	var source string
 	var destination string
 
-	//./main -source /home/useralex/bashwrapper/bashwrapper/folder/source -destination /home//useralex/bashwrapper/bashwrapper/folder/destination
-	//
- 	
 	flag.StringVar(&source, "source", "input_dir", "Directory")
 	flag.StringVar(&destination, "destination", "output_dir", "Directory")
 	flag.Parse()
